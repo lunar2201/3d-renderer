@@ -5,9 +5,13 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.getElementById('container').appendChild(renderer.domElement);
 
-// Create a cube
+// Load texture
+const textureLoader = new THREE.TextureLoader();
+const cubeTexture = textureLoader.load('texture.png'); // Adjust the path if needed
+
+// Create a cube with the texture
 const geometry = new THREE.BoxGeometry();
-const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
+const material = new THREE.MeshBasicMaterial({ map: cubeTexture });
 const cube = new THREE.Mesh(geometry, material);
 scene.add(cube);
 
