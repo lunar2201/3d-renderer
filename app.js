@@ -14,10 +14,11 @@ scene.add(cube);
 // Set camera position
 camera.position.z = 5;
 
-// Add interactivity - simple rotation control using mouse
+// Interactivity variables
 let isMouseDown = false;
 let mouseX = 0, mouseY = 0;
 
+// Mouse events
 const onDocumentMouseDown = (event) => {
     isMouseDown = true;
     mouseX = event.clientX;
@@ -41,10 +42,40 @@ const onDocumentMouseUp = () => {
     isMouseDown = false;
 };
 
-// Add event listeners for mouse controls
+// Touch events (for mobile)
+const onDocumentTouchStart = (event) => {
+    if (event.touches.length === 1) { // Only track single touch
+        isMouseDown = true;
+        mouseX = event.touches[0].clientX;
+        mouseY = event.touches[0].clientY;
+    }
+};
+
+const onDocumentTouchMove = (event) => {
+    if (!isMouseDown || event.touches.length !== 1) return;
+
+    const deltaX = event.touches[0].clientX - mouseX;
+    const deltaY = event.touches[0].clientY - mouseY;
+
+    cube.rotation.y += deltaX * 0.01;
+    cube.rotation.x += deltaY * 0.01;
+
+    mouseX = event.touches[0].clientX;
+    mouseY = event.touches[0].clientY;
+};
+
+const onDocumentTouchEnd = () => {
+    isMouseDown = false;
+};
+
+// Add event listeners for mouse and touch controls
 document.addEventListener('mousedown', onDocumentMouseDown, false);
 document.addEventListener('mousemove', onDocumentMouseMove, false);
 document.addEventListener('mouseup', onDocumentMouseUp, false);
+
+document.addEventListener('touchstart', onDocumentTouchStart, false);
+document.addEventListener('touchmove', onDocumentTouchMove, false);
+document.addEventListener('touchend', onDocumentTouchEnd, false);
 
 // Handle window resize
 window.addEventListener('resize', () => {
