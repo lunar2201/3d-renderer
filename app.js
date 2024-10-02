@@ -11,9 +11,17 @@ const cubeTexture = textureLoader.load('texture.png'); // Adjust the path if nee
 
 // Create a cube with the texture
 const geometry = new THREE.BoxGeometry();
-const material = new THREE.MeshBasicMaterial({ map: cubeTexture });
+const material = new THREE.MeshStandardMaterial({ map: cubeTexture }); // Use MeshStandardMaterial for better lighting
 const cube = new THREE.Mesh(geometry, material);
 scene.add(cube);
+
+// Add lights
+const ambientLight = new THREE.AmbientLight(0x404040, 1); // Soft white light
+scene.add(ambientLight);
+
+const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5); // White directional light
+directionalLight.position.set(5, 5, 5); // Set light position
+scene.add(directionalLight);
 
 // Set camera position
 camera.position.z = 5;
