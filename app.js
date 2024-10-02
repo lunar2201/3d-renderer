@@ -5,15 +5,23 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.getElementById('container').appendChild(renderer.domElement);
 
-// Load texture
+// Load textures
 const textureLoader = new THREE.TextureLoader();
 const cubeTexture = textureLoader.load('texture.png'); // Adjust the path if needed
+const backgroundTexture = textureLoader.load('background.png'); // Load the background texture
 
 // Create a cube with the texture
 const geometry = new THREE.BoxGeometry();
 const material = new THREE.MeshStandardMaterial({ map: cubeTexture }); // Use MeshStandardMaterial for better lighting
 const cube = new THREE.Mesh(geometry, material);
 scene.add(cube);
+
+// Create a large plane for the background
+const backgroundGeometry = new THREE.PlaneGeometry(20, 20); // Adjust size as needed
+const backgroundMaterial = new THREE.MeshBasicMaterial({ map: backgroundTexture, side: THREE.DoubleSide });
+const backgroundPlane = new THREE.Mesh(backgroundGeometry, backgroundMaterial);
+backgroundPlane.position.z = -5; // Position the plane behind the cube
+scene.add(backgroundPlane);
 
 // Add lights
 const ambientLight = new THREE.AmbientLight(0x404040, 1); // Soft white light
