@@ -83,9 +83,10 @@ document.addEventListener('mousedown', onMouseDown, false);
 document.addEventListener('mousemove', onMouseMove, false);
 document.addEventListener('mouseup', onMouseUp, false);
 
-document.addEventListener('touchstart', onTouchStart, false);
-document.addEventListener('touchmove', onTouchMove, false);
-document.addEventListener('touchend', onTouchEnd, false);
+// Specify passive: false to allow preventDefault
+document.addEventListener('touchstart', onTouchStart, { passive: false });
+document.addEventListener('touchmove', onTouchMove, { passive: false });
+document.addEventListener('touchend', onTouchEnd, { passive: false });
 
 // Handle window resize
 window.addEventListener('resize', () => {
