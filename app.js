@@ -15,67 +15,73 @@ scene.add(cube);
 camera.position.z = 5;
 
 // Interactivity variables
-let isMouseDown = false;
-let mouseX = 0, mouseY = 0;
+let isInteracting = false;
+let startX = 0, startY = 0;
 
 // Mouse events
-const onDocumentMouseDown = (event) => {
-    isMouseDown = true;
-    mouseX = event.clientX;
-    mouseY = event.clientY;
+const onMouseDown = (event) => {
+    isInteracting = true;
+    startX = event.clientX;
+    startY = event.clientY;
 };
 
-const onDocumentMouseMove = (event) => {
-    if (!isMouseDown) return;
+const onMouseMove = (event) => {
+    if (!isInteracting) return;
 
-    const deltaX = event.clientX - mouseX;
-    const deltaY = event.clientY - mouseY;
+    const deltaX = event.clientX - startX;
+    const deltaY = event.clientY - startY;
 
     cube.rotation.y += deltaX * 0.01;
     cube.rotation.x += deltaY * 0.01;
 
-    mouseX = event.clientX;
-    mouseY = event.clientY;
+    startX = event.clientX;
+    startY = event.clientY;
 };
 
-const onDocumentMouseUp = () => {
-    isMouseDown = false;
+const onMouseUp = () => {
+    isInteracting = false;
 };
 
 // Touch events (for mobile)
-const onDocumentTouchStart = (event) => {
-    if (event.touches.length === 1) { // Only track single touch
-        isMouseDown = true;
-        mouseX = event.touches[0].clientX;
-        mouseY = event.touches[0].clientY;
+const onTouchStart = (event) => {
+    if (event.touches.length === 1) {
+        isInteracting = true;
+        startX = event.touches[0].clientX;
+        startY = event.touches[0].clientY;
+
+        // Prevent default to avoid scrolling
+        event.preventDefault();
     }
 };
 
-const onDocumentTouchMove = (event) => {
-    if (!isMouseDown || event.touches.length !== 1) return;
+const onTouchMove = (event) => {
+    if (!isInteracting || event.touches.length !== 1) return;
 
-    const deltaX = event.touches[0].clientX - mouseX;
-    const deltaY = event.touches[0].clientY - mouseY;
+    const deltaX = event.touches[0].clientX - startX;
+    const deltaY = event.touches[0].clientY - startY;
 
     cube.rotation.y += deltaX * 0.01;
     cube.rotation.x += deltaY * 0.01;
 
-    mouseX = event.touches[0].clientX;
-    mouseY = event.touches[0].clientY;
+    startX = event.touches[0].clientX;
+    startY = event.touches[0].clientY;
+
+    // Prevent default to avoid scrolling
+    event.preventDefault();
 };
 
-const onDocumentTouchEnd = () => {
-    isMouseDown = false;
+const onTouchEnd = () => {
+    isInteracting = false;
 };
 
 // Add event listeners for mouse and touch controls
-document.addEventListener('mousedown', onDocumentMouseDown, false);
-document.addEventListener('mousemove', onDocumentMouseMove, false);
-document.addEventListener('mouseup', onDocumentMouseUp, false);
+document.addEventListener('mousedown', onMouseDown, false);
+document.addEventListener('mousemove', onMouseMove, false);
+document.addEventListener('mouseup', onMouseUp, false);
 
-document.addEventListener('touchstart', onDocumentTouchStart, false);
-document.addEventListener('touchmove', onDocumentTouchMove, false);
-document.addEventListener('touchend', onDocumentTouchEnd, false);
+document.addEventListener('touchstart', onTouchStart, false);
+document.addEventListener('touchmove', onTouchMove, false);
+document.addEventListener('touchend', onTouchEnd, false);
 
 // Handle window resize
 window.addEventListener('resize', () => {
